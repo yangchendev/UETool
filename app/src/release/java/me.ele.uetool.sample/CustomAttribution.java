@@ -1,4 +1,4 @@
-package me.ele.uetool.sample;
+package me.ele.appboard.sample;
 
 public class CustomAttribution {
 

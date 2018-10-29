@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTool
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+    }
+}
+
+dependencies {
+    compile project(':appboard-base')
+    //  compile "me.ele:uetool-base:${versions.release}"
+    provided "com.facebook.fresco:fresco:${versions.fresco}"
+}
+
+publish {
+    userOrg = 'jackcho'
+    groupId = 'me.ele'
+    artifactId = 'appboard-fresco'
+    publishVersion = versions.release
+    desc = 'show/edit any view\'s attributions on the screen.'
+    website = 'www.ele.me'
+}

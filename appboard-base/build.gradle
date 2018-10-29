@@ -1,0 +1,25 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTool
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+    }
+
+    dependencies {
+        compile "com.android.support:appcompat-v7:${versions.supportLibrary}"
+        compile project(':appboard-res')
+    }
+}
+
+publish {
+    userOrg = 'jackcho'
+    groupId = 'me.ele'
+    artifactId = 'appboard-base'
+    publishVersion = versions.release
+    desc = 'show/edit any view\'s attributions on the screen.'
+    website = 'www.ele.me'
+}
