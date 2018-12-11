@@ -2,6 +2,7 @@ package me.ele.appboard;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -38,6 +39,9 @@ public class UETSubMenu extends LinearLayout {
 
     public void update(SubMenu subMenu) {
         vImage.setImageResource(subMenu.getImageRes());
+        if(TextUtils.isEmpty(subMenu.getTitle())){
+            vTitle.setVisibility(GONE);
+        }
         vTitle.setText(subMenu.getTitle());
         setOnClickListener(subMenu.getOnClickListener());
     }

@@ -5,4 +5,7 @@
   <string name="uet_grid">网格栅栏</string>
   <string name="uet_perform">性能测试</string>
   <string name="uet_edit_panel">编辑面板</string>
+  <string name="appboard_ued">视觉</string>
+  <string name="appboard_appdata">应用数据</string>
+  <string name="appboard_tools">开发工具</string>
 </resources>

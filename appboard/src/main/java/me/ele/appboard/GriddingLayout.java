@@ -86,7 +86,7 @@ public class GriddingLayout extends View {
                 textWidth = rectX.right - rectX.left;
                 paint.setStrokeWidth(6);
                 canvas.drawLine(startX, 0, startX, dip2px(20), paint);
-                canvas.drawText(textString,startX-textWidth/2,dip2px(28),textPain);
+                canvas.drawText(textString,startX-textWidth/2,dip2px(30),textPain);
             }else{
                 paint.setStrokeWidth(3);
                 canvas.drawLine(startX, 0, startX, dip2px(10), paint);
@@ -96,11 +96,16 @@ public class GriddingLayout extends View {
         }
         int startY = 0;
         int countY = 0;
+        int textHeight = 0;
         while (startY < screenHeight) {
             if(countY % 10 == 0 ){
+                textString = countY * 5 + "";
+                Rect rectX = new Rect();
+                textPain.getTextBounds(textString,0,textString.length(),rectX);
+                textHeight = rectX.bottom - rectX.top;
                 paint.setStrokeWidth(6);
                 canvas.drawLine(0, startY, dip2px(20), startY, paint);
-                canvas.drawText(countY*5+ "",dip2px(26),startY,textPain);
+                canvas.drawText(textString,dip2px(26),startY+textHeight/2,textPain);
             }else{
                 paint.setStrokeWidth(3);
                 canvas.drawLine(0, startY, dip2px(10), startY, paint);

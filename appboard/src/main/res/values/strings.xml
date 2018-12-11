@@ -9,4 +9,7 @@
     <string name="uet_grid">gridding</string>
     <string name="uet_perform">perform</string>
     <string name="uet_edit_panel">Edit Panel</string>
+    <string name="appboard_ued">UED</string>
+    <string name="appboard_appdata">appdata</string>
+    <string name="appboard_tools">tools</string>
 </resources>

@@ -20,6 +20,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,6 +32,12 @@ public class UETMenu extends LinearLayout {
 
     private View vMenu;
     private ViewGroup vSubMenuContainer;
+    private ViewGroup vMainMenu;
+    private ViewGroup mLayoutUed;
+    private ViewGroup mUedMenuContainer;
+    private ViewGroup mSubMenuCatch;
+    private ViewGroup mSubMenuGrid;
+    private ViewGroup mSubMenuPosition;
     private ValueAnimator animator;
     private Interpolator defaultInterpolator = new AccelerateDecelerateInterpolator();
     private List<UETSubMenu.SubMenu> subMenus = new ArrayList<>();
@@ -40,6 +47,12 @@ public class UETMenu extends LinearLayout {
     private int touchSlop;
     private int y;
 
+    public enum Appboard {
+        UED,
+        PERFORM,
+        DEVTOOL,
+        APPDATA
+    }
     public UETMenu(final Context context, int y) {
         super(context);
         inflate(context, R.layout.uet_menu_layout, this);
@@ -51,44 +64,81 @@ public class UETMenu extends LinearLayout {
 
         vMenu = findViewById(R.id.menu);
         vSubMenuContainer = findViewById(R.id.sub_menu_container);
-        Resources resources = context.getResources();
-        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_catch_view), R.drawable.uet_edit_attr, new OnClickListener() {
+        vMainMenu = findViewById(R.id.include_appboard_main_menu);
+        mLayoutUed = findViewById(R.id.appboard_ued);
+        mUedMenuContainer = findViewById(R.id.include_appboard_ued_menu);
+        mSubMenuCatch = mUedMenuContainer.findViewById(R.id.ued_catch);
+        mSubMenuGrid = mUedMenuContainer.findViewById(R.id.ued_grid);
+        mSubMenuPosition = mUedMenuContainer.findViewById(R.id.ued_position);
+        mLayoutUed.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"ued",Toast.LENGTH_LONG).show();
+                //todo 切换成ued的布局
+                if(vMainMenu.getVisibility() == VISIBLE){
+                    vMainMenu.setVisibility(GONE);
+                    mUedMenuContainer.setVisibility(VISIBLE);
+                }
+            }
+        });
+        mSubMenuCatch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 open(TransparentActivity.Type.TYPE_EDIT_ATTR);
             }
-        }));
-        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_relative_location), R.drawable.uet_relative_position,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        open(TransparentActivity.Type.TYPE_RELATIVE_POSITION);
-                    }
-                }));
-        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_grid), R.drawable.uet_show_gridding,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        open(TransparentActivity.Type.TYPE_SHOW_GRIDDING);
-                    }
-                }));
-        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_perform), R.drawable.uet_show_gridding,
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        open(TransparentActivity.Type.TYPE_PERFORM);
-                    }
-                }));
-        for (UETSubMenu.SubMenu subMenu : subMenus) {
-            UETSubMenu uetSubMenu = new UETSubMenu(getContext());
-            uetSubMenu.update(subMenu);
-            vSubMenuContainer.addView(uetSubMenu);
-        }
+        });
+        mSubMenuGrid.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open(TransparentActivity.Type.TYPE_SHOW_GRIDDING);
+            }
+        });
+        mSubMenuPosition.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open(TransparentActivity.Type.TYPE_RELATIVE_POSITION);
+            }
+        });
+        Resources resources = context.getResources();
+
+//        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_catch_view), R.drawable.uet_edit_attr, new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                open(TransparentActivity.Type.TYPE_EDIT_ATTR);
+//            }
+//        }));
+//        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_relative_location), R.drawable.uet_relative_position,
+//                new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        open(TransparentActivity.Type.TYPE_RELATIVE_POSITION);
+//                    }
+//                }));
+//        subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_grid), R.drawable.uet_show_gridding,
+//                new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        open(TransparentActivity.Type.TYPE_SHOW_GRIDDING);
+//                    }
+//                }));
+//        for (UETSubMenu.SubMenu subMenu : subMenus) {
+//            UETSubMenu uetSubMenu = new UETSubMenu(getContext());
+//            uetSubMenu.update(subMenu);
+//            vSubMenuContainer.addView(uetSubMenu);
+//        }
 
         vMenu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startAnim();
+                //startAnim();
+                if(vMainMenu.getVisibility() == VISIBLE){
+                    vMainMenu.setVisibility(GONE);
+                }else if(mUedMenuContainer.getVisibility() == VISIBLE){
+                    mUedMenuContainer.setVisibility(GONE);
+                    vMainMenu.setVisibility(VISIBLE);
+                }else{
+                    vMainMenu.setVisibility(VISIBLE);
+                }
             }
         });
 
@@ -230,6 +280,52 @@ public class UETMenu extends LinearLayout {
         @Override
         public float getInterpolation(float input) {
             return mWrappedInterpolator.getInterpolation(Math.abs(input - 1f));
+        }
+    }
+
+    private void updateSubMenus(Appboard type,Context context){
+        if(subMenus == null){
+            return;
+        }
+        subMenus.clear();
+        vSubMenuContainer.removeAllViews();
+        Resources resources = context.getResources();
+        switch (type){
+            case UED:
+                subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_catch_view), R.drawable.uet_edit_attr, new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        open(TransparentActivity.Type.TYPE_EDIT_ATTR);
+                    }
+                }));
+                subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_relative_location), R.drawable.uet_relative_position,
+                        new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                open(TransparentActivity.Type.TYPE_RELATIVE_POSITION);
+                            }
+                        }));
+                subMenus.add(new UETSubMenu.SubMenu(resources.getString(R.string.uet_grid), R.drawable.uet_show_gridding,
+                        new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                open(TransparentActivity.Type.TYPE_SHOW_GRIDDING);
+                            }
+                        }));
+                for (UETSubMenu.SubMenu subMenu : subMenus) {
+                    UETSubMenu uetSubMenu = new UETSubMenu(getContext());
+                    uetSubMenu.update(subMenu);
+                    vSubMenuContainer.addView(uetSubMenu);
+                }
+                break;
+            case PERFORM:
+                break;
+            case APPDATA:
+                break;
+            case DEVTOOL:
+                break;
+            default:
+                break;
         }
     }
 }

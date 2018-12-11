@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:tools="http://schemas.android.com/tools"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:gravity="center_vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
        tools:background="#fff"
     >
-
     <ImageView
         android:id="@+id/menu"
         android:layout_width="54dp"
@@ -30,7 +28,15 @@
             android:paddingRight="10dp"
             android:translationX="-10000dp"
             />
-
     </HorizontalScrollView>
-
+    <include
+        android:visibility="gone"
+        android:id="@+id/include_appboard_main_menu"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        layout="@layout/layout_appboard_main_menu"/>
+    <include
+        android:visibility="gone"
+        android:id="@+id/include_appboard_ued_menu"
+        layout="@layout/appboard_ued_menu"/>
 </merge>
